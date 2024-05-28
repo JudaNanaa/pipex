@@ -12,7 +12,7 @@
 
 #include "../includes/pipex.h"
 
-int ft_check_if_file_exist(char *path)
+int	ft_check_if_file_exist(char *path)
 {
 	if (access(path, F_OK) == -1)
 		return (-1);

@@ -10,16 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _PIPEX_H
-# define _PIPEX_H
+#ifndef PIPEX_H
+# define PIPEX_H
 
-# include <unistd.h>
+# include "libft.h"
+# include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
-# include <errno.h>
-#include <string.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
+# include <sys/wait.h>
 
+int		ft_check_if_file_exist(char *path);
+int		ft_free_split(char **split, int index);
+int		ft_strlen_2(char **str);
 
-int ft_check_if_file_exist(char *path);
+char	**ft_args_add(char **args, char *str);
 
 #endif
