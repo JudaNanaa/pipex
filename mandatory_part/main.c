@@ -16,14 +16,6 @@
 #include <time.h>
 #include <unistd.h>
 
-void	ft_close_file(int fd_file1, int fd_file2)
-{
-	if (fd_file1 != -1)
-		close(fd_file1);
-	if (fd_file2 != -1)
-		close(fd_file2);
-}
-
 char	**ft_remove_key_in_path(char **envp)
 {
 	int		len;
