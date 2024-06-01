@@ -1,3 +1,4 @@
 ./pipex
 .gitignore
 .vscode
+*.o
