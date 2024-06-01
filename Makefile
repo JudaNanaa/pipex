@@ -12,9 +12,9 @@
 
 CC = cc
 
-C_FLAGS = -Wall -Wextra -Werror -g3
+C_FLAGS = -Wall -Wextra -Werror -g3 -no-pie
 
-SRCS = $(addprefix mandatory_part/, main.c check_if_file_exist.c utils.c)
+SRCS = $(addprefix mandatory_part/, main.c  utils.c path.c)
 
 OBJS = $(SRCS:.c=.o)
 

@@ -19,13 +19,16 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <unistd.h>
 # include <sys/wait.h>
+# include <unistd.h>
 
-int		ft_check_if_file_exist(char *path);
-int		ft_free_split(char **split, int index);
-int		ft_strlen_2(char **str);
+int		ft_free_double_tab(char **tab, int index);
+int		ft_double_tab_strlen(char **str);
 
 char	**ft_args_add(char **args, char *str);
+
+char	*ft_strjoin_with_slash(char const *s1, char const *s2);
+char	*ft_strjoin_free_s1(char *s1, char *s2);
+char	*ft_try_to_access_path(char **envp, char *argv);
 
 #endif

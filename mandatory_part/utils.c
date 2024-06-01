@@ -12,7 +12,7 @@
 
 #include "../includes/pipex.h"
 
-int	ft_strlen_2(char **str)
+int	ft_double_tab_strlen(char **str)
 {
 	int	i;
 
@@ -22,7 +22,7 @@ int	ft_strlen_2(char **str)
 	return (i);
 }
 
-int	ft_free_split(char **split, int index)
+int	ft_free_double_tab(char **split, int index)
 {
 	if (split[index] == NULL)
 	{
@@ -41,7 +41,7 @@ char	**ft_args_add(char **args, char *str)
 	int		i;
 
 	i = 0;
-	len_args = ft_strlen_2(args);
+	len_args = ft_double_tab_strlen(args);
 	sortie = malloc(sizeof(char *) * (len_args + 1 + 1));
 	if (!sortie)
 		return (NULL);
@@ -49,14 +49,14 @@ char	**ft_args_add(char **args, char *str)
 	{
 		sortie[i] = malloc(sizeof(char) * (ft_strlen(args[i]) + 1));
 		if (!sortie)
-			return (ft_free_split(sortie, i - 1), NULL);
+			return (ft_free_double_tab(sortie, i - 1), NULL);
 		ft_strcpy(sortie[i], args[i]);
 		i++;
 	}
 	sortie[i] = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	if (!sortie)
-		return (ft_free_split(sortie, i - 1), NULL);
+		return (ft_free_double_tab(sortie, i - 1), NULL);
 	ft_strcpy(sortie[i], str);
 	sortie[++i] = 0;
-	return (sortie);
+	return (ft_free_double_tab(args, ft_double_tab_strlen(args)), sortie);
 }

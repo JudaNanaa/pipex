@@ -11,9 +11,12 @@
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+#include <stdio.h>
+#include <strings.h>
+#include <time.h>
 #include <unistd.h>
 
-void ft_close_file(int fd_file1, int fd_file2)
+void	ft_close_file(int fd_file1, int fd_file2)
 {
 	if (fd_file1 != -1)
 		close(fd_file1);
@@ -21,60 +24,89 @@ void ft_close_file(int fd_file1, int fd_file2)
 		close(fd_file2);
 }
 
-int main(int argc, char **argv)
+char	**ft_remove_key_in_path(char **envp)
 {
-	char *path;
-	int fd[2];
-	int pid1;
-	int pid2;
-	char *path2;
-	char **argv2;
+	int		len;
+	char	**envp_without_key;
+	int		index;
+
+	index = -1;
+	len = ft_double_tab_strlen(envp);
+	envp_without_key = malloc(sizeof(char *) * (len + 1));
+	if (!envp_without_key)
+		return (NULL);
+	while (++index < len)
+		envp_without_key[index] = ft_strdup(ft_strchr(envp[index], '=') + 1);
+	envp_without_key[index] = NULL;
+	return (envp_without_key);
+}
+
+char	*ft_strcat_all_envp(char **envp_without_key)
+{
+	char	*strcat_all_envp;
+	int		len;
+	int		index;
+
+	len = 0;
+	index = 0;
+	while (envp_without_key[index])
+		len += ft_strlen(envp_without_key[index++]);
+	strcat_all_envp = malloc(sizeof(char) * (len + 1));
+	if (!strcat_all_envp)
+		return (NULL);
+	index = 0;
+	strcat_all_envp[0] = '\0';
+	while (envp_without_key[index])
+		strcat_all_envp = ft_strjoin_free_s1(strcat_all_envp,
+				envp_without_key[index++]);
+	return (strcat_all_envp);
+}
+
+char	*ft_find_path(char **envp, char *argv)
+{
+	char	**envp_without_key;
+	char	*strcat_all_envp;
+	char	**split_all_envp;
+	char	*path;
+
+	envp_without_key = ft_remove_key_in_path(envp);
+	if (!envp_without_key)
+		return (NULL);
+	strcat_all_envp = ft_strcat_all_envp(envp_without_key);
+	if (!strcat_all_envp)
+	{
+		ft_free_double_tab(envp_without_key,
+			ft_double_tab_strlen(envp_without_key));
+		return (NULL);
+	}
+	ft_free_double_tab(envp_without_key,
+		ft_double_tab_strlen(envp_without_key));
+	split_all_envp = ft_split(strcat_all_envp, ":\n");
+	if (!split_all_envp)
+		return (free(strcat_all_envp), NULL);
+	path = ft_try_to_access_path(split_all_envp, argv);
+	ft_free_double_tab(split_all_envp, ft_double_tab_strlen(split_all_envp));
+	return (free(strcat_all_envp), path);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	char	*path;
+	char	**command1;
 
 	(void)argc;
-	char **args = ft_split(argv[2], ' ');
-	if (!args)
+	command1 = ft_split(argv[2], " ");
+	if (!command1)
 		return (1);
-	path = ft_strjoin("/usr/bin/", args[0]);
+	path = ft_find_path(envp, command1[0]);
 	if (!path)
-		return (ft_free_split(args, ft_strlen_2(args)), 2);
-	args = ft_args_add(args, argv[1]);
-	if (!args)
-		return (ft_free_split(args, ft_strlen_2(args)), 3);
-	char *test1[] = {NULL};
-
-
-	argv2 = ft_split(argv[3], ' ');
-	if (!argv2)
-		return (ft_free_split(args, ft_strlen_2(args)), 7);
-	path2 = ft_strjoin("/usr/bin/", argv2[0]);
-	if (!path2)
-		return (8);
-	if (pipe(fd) < 0)
-		return (ft_free_split(args, ft_strlen_2(args)), 4);
-	pid1 = fork();
-	if (pid1 < 0)
-		return (ft_free_split(args, ft_strlen_2(args)), 5);
-	if (pid1 == 0)
 	{
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[1]);
-		close(fd[0]);
-		execve(path, args, test1);
+		ft_free_double_tab(command1, ft_double_tab_strlen(command1));
+		return (1);
 	}
-	pid2 = fork();
-	if (pid2 < 0)
-		return (ft_free_split(args, ft_strlen_2(args)), 6);
-	if (pid2 == 0)
-	{
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		close(fd[1]);
-		execve(path2, argv2, test1);
-	}
-	close(fd[1]);
-	close(fd[0]);
-
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
+	command1 = ft_args_add(command1, argv[1]);
+	execve(path, command1, envp);
+	printf("%s\n", path);
+	free(path);
 	return (0);
 }
