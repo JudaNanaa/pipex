@@ -12,7 +12,7 @@
 
 CC = cc
 
-C_FLAGS = -Wall -Wextra -Werror -g3 -no-pie
+C_FLAGS = -Wall -Wextra -Werror -g3 
 
 SRCS = $(addprefix mandatory_part/, main.c  utils.c path.c)
 
@@ -20,19 +20,26 @@ OBJS = $(SRCS:.c=.o)
 
 NAME = pipex
 
+LIBFT = libft.a
+
+$(LIBFT):
+	make -C ./libft
+
 all : $(NAME)
 
-$(NAME) : $(OBJS)
-	$(CC) $(C_FLAGS) $^ -I includes -L lib -lft -lftprintf -lget_next_line -o $@
+$(NAME) : $(LIBFT) $(OBJS)
+	$(CC) $(C_FLAGS) $(OBJS) -I includes -L ./libft -lft -o $@
 
 %.o : %.c
 	$(CC) $(C_FLAGS) -c  $^ -o $@
 
 clean :
 	rm -rf $(OBJS)
+	make clean -C ./libft
 
 fclean : clean
 	rm -rf $(NAME)
+	make fclean -C ./libft
 
 re : fclean all
 
