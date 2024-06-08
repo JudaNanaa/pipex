@@ -6,17 +6,11 @@
 /*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:28:57 by madamou           #+#    #+#             */
-/*   Updated: 2024/05/19 19:56:12 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/08 17:22:13 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-#include <fcntl.h>
-#include <stdio.h>
-#include <strings.h>
-#include <sys/wait.h>
-#include <time.h>
-#include <unistd.h>
 
 char	**ft_remove_key_in_path(char **envp)
 {

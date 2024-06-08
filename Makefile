@@ -25,7 +25,7 @@ LIBFT = libft.a
 all : $(LIBFT) $(NAME)
 
 $(NAME) : $(OBJS)
-	$(CC) $(C_FLAGS) $(OBJS) -I includes -L ./libft -lft -o $@
+	$(CC) $(C_FLAGS) $^ -I includes -L ./libft -lft -o $@
 
 $(LIBFT):
 	make -C ./libft

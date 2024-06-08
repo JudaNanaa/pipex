@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-#include <strings.h>
-#include <unistd.h>
 
 char	*ft_strjoin_with_slash(char const *s1, char const *s2)
 {
