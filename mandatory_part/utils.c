@@ -34,7 +34,7 @@ int	ft_free_double_tab(char **split, int index)
 	return (1);
 }
 
-char	**ft_args_add(char **args, char *str)
+char	**ft_args_add(char **args)
 {
 	int		len_args;
 	char	**sortie;
@@ -42,7 +42,7 @@ char	**ft_args_add(char **args, char *str)
 
 	i = 0;
 	len_args = ft_double_tab_strlen(args);
-	sortie = malloc(sizeof(char *) * (len_args + 1 + 1));
+	sortie = malloc(sizeof(char *) * (len_args + 1));
 	if (!sortie)
 		return (NULL);
 	while (i < len_args)
@@ -53,10 +53,6 @@ char	**ft_args_add(char **args, char *str)
 		ft_strcpy(sortie[i], args[i]);
 		i++;
 	}
-	sortie[i] = malloc(sizeof(char) * (ft_strlen(str) + 1));
-	if (!sortie)
-		return (ft_free_double_tab(sortie, i - 1), NULL);
-	ft_strcpy(sortie[i], str);
-	sortie[++i] = 0;
+	sortie[i] = 0;
 	return (ft_free_double_tab(args, ft_double_tab_strlen(args)), sortie);
 }

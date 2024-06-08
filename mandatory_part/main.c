@@ -11,8 +11,10 @@
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+#include <fcntl.h>
 #include <stdio.h>
 #include <strings.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -83,22 +85,24 @@ char	*ft_find_path(char **envp, char *argv)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*path;
-	char	**command1;
+	int	pid;
+	int	fd[2];
 
 	(void)argc;
-	command1 = ft_split(argv[2], " ");
-	if (!command1)
-		return (1);
-	path = ft_find_path(envp, command1[0]);
-	if (!path)
+	if (pipe(fd) == -1)
+		return (ft_printf("Error when creating pipe\n"), 1);
+	pid = fork();
+	if (pid == -1)
+		return (ft_printf("Error when try to fork\n"), 1);
+	if (pid == 0)
 	{
-		ft_free_double_tab(command1, ft_double_tab_strlen(command1));
-		return (1);
+		if (ft_file_to_command_one(argv, envp, fd) == 1)
+			return (1);
 	}
-	command1 = ft_args_add(command1, argv[1]);
-	execve(path, command1, envp);
-	printf("%s\n", path);
-	free(path);
+	else
+	{
+		if (ft_command_one_to_command_two(argv, envp, fd) == 1)
+			return (1);
+	}
 	return (0);
 }
