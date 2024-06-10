@@ -12,11 +12,19 @@
 
 CC = cc
 
+OBJS_DIR = .objets/
+
+SRCS_DIR = mandatory_part/
+
 C_FLAGS = -Wall -Wextra -Werror -g3 
 
-SRCS = $(addprefix mandatory_part/, main.c utils.c path.c pipex.c)
+SRCS = main.c utils.c path.c pipex.c
 
-OBJS = $(SRCS:.c=.o)
+SRCS := $(SRCS:%=$(SRCS_DIR)/%)
+
+OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
+
+DIR_DUP = mkdir -p $(@D)
 
 NAME = pipex
 
@@ -30,11 +38,12 @@ $(NAME) : $(OBJS)
 $(LIBFT):
 	make -C ./libft
 
-%.o : %.c
+$(OBJS_DIR)%.o : $(SRCS_DIR)%.c
+	@$(DIR_DUP)
 	$(CC) $(C_FLAGS) -c  $^ -o $@
 
 clean :
-	rm -rf $(OBJS)
+	rm -rf $(OBJS_DIR)
 	make clean -C ./libft
 
 fclean : clean

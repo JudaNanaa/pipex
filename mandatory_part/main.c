@@ -82,21 +82,16 @@ int	main(int argc, char **argv, char **envp)
 	int	pid;
 	int	fd[2];
 
-	(void)argc;
+	if (argc < 5)
+		return (ft_printf("Pas assez d'arguments\n"), 1);
 	if (pipe(fd) == -1)
 		return (ft_printf("Error when creating pipe\n"), 1);
 	pid = fork();
 	if (pid == -1)
 		return (ft_printf("Error when try to fork\n"), 1);
 	if (pid == 0)
-	{
-		if (ft_file_to_command_one(argv, envp, fd) == 1)
-			return (1);
-	}
+			return (ft_file_to_command_one(argv, envp, fd));
 	else
-	{
-		if (ft_command_one_to_command_two(argv, envp, fd) == 1)
-			return (1);
-	}
+			return (ft_command_one_to_command_two(argv, envp, fd));
 	return (0);
 }
