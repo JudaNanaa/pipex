@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:37:10 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/01 19:34:20 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/12 03:01:11 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	**ft_add_command(char **envp, char *argv)
 		envp_with_command[index] = ft_strjoin_with_slash(envp[index], argv);
 		if (!envp_with_command[index])
 		{
-			ft_free_double_tab(envp_with_command, index - 1);
+			ft_free_double_tab(envp_with_command);
 			return (NULL);
 		}
 		index++;
@@ -96,8 +96,7 @@ char	*ft_try_to_access_path(char **envp, char *argv)
 		if (access(envp_with_command[index], F_OK) == 0)
 		{
 			path = ft_strdup(envp_with_command[index]);
-			ft_free_double_tab(envp_with_command,
-				ft_double_tab_strlen(envp_with_command));
+			ft_free_double_tab(envp_with_command);
 			return (path);
 		}
 		index++;

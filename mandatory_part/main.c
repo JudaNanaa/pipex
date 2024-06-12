@@ -6,11 +6,15 @@
 /*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:28:57 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/08 17:22:13 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/12 03:01:59 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
 
 char	**ft_remove_key_in_path(char **envp)
 {
@@ -63,35 +67,54 @@ char	*ft_find_path(char **envp, char *argv)
 	strcat_all_envp = ft_strcat_all_envp(envp_without_key);
 	if (!strcat_all_envp)
 	{
-		ft_free_double_tab(envp_without_key,
-			ft_double_tab_strlen(envp_without_key));
+		ft_free_double_tab(envp_without_key);
 		return (NULL);
 	}
-	ft_free_double_tab(envp_without_key,
-		ft_double_tab_strlen(envp_without_key));
+	ft_free_double_tab(envp_without_key);
 	split_all_envp = ft_split(strcat_all_envp, ":\n");
 	if (!split_all_envp)
 		return (free(strcat_all_envp), NULL);
 	path = ft_try_to_access_path(split_all_envp, argv);
-	ft_free_double_tab(split_all_envp, ft_double_tab_strlen(split_all_envp));
+	ft_free_double_tab(split_all_envp);
 	return (free(strcat_all_envp), path);
+}
+
+int	ft_fork(int argc, char **argv, char **envp, int **pipes)
+{
+	int		i;
+	pid_t	pid;
+
+	i = 0;
+	while (i <= argc - 4)
+	{
+		pid = fork();
+		if (pid == -1)
+			return (ft_printf("Error when creating a fork\n"), 1);
+		if (pid == 0)
+		{
+			if (i == 0)
+				return (ft_file_to_command_one(argv, envp, pipes, argc - 3));
+			else if (i == argc - 4)
+				return (ft_command_one_to_outfile(argv, argc, pipes));
+			else
+				return (ft_command_to_command(i, pipes));
+		}
+		i++;
+	}
+	ft_free_pipe(pipes, argc - 3);
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	int	pid;
-	int	fd[2];
+	int	**pipes;
 
 	if (argc < 5)
 		return (ft_printf("Pas assez d'arguments\n"), 1);
-	if (pipe(fd) == -1)
-		return (ft_printf("Error when creating pipe\n"), 1);
-	pid = fork();
-	if (pid == -1)
-		return (ft_printf("Error when try to fork\n"), 1);
-	if (pid == 0)
-			return (ft_file_to_command_one(argv, envp, fd));
-	else
-			return (ft_command_one_to_command_two(argv, envp, fd));
-	return (0);
+	ft_static_argv_or_envp("argv", argv);
+	ft_static_argv_or_envp("envp", envp);
+	pipes = ft_malloc_pipes(argc - 3 - 1);
+	if (!pipes)
+		return (ft_printf("Error when malloc pipe\n"), 1);
+	return (ft_fork(argc, argv, envp, pipes));
 }

@@ -6,7 +6,7 @@
 #    By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/16 17:26:32 by madamou           #+#    #+#              #
-#    Updated: 2024/05/19 19:56:48 by madamou          ###   ########.fr        #
+#    Updated: 2024/06/11 13:45:28 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRCS_DIR = mandatory_part/
 
 C_FLAGS = -Wall -Wextra -Werror -g3 
 
-SRCS = main.c utils.c path.c pipex.c
+SRCS = main.c utils.c path.c pipex.c malloc.c static.c
 
 SRCS := $(SRCS:%=$(SRCS_DIR)/%)
 
