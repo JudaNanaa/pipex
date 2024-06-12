@@ -18,7 +18,7 @@ SRCS_DIR = mandatory_part/
 
 C_FLAGS = -Wall -Wextra -Werror -g3 
 
-SRCS = main.c utils.c path.c pipex.c malloc.c static.c
+SRCS = main.c utils.c path.c pipex.c pipe.c static.c
 
 SRCS := $(SRCS:%=$(SRCS_DIR)/%)
 

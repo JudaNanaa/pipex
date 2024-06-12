@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
 
 int	ft_file_to_command_one(char **argv, char **envp, int **fd, int size)
 {
