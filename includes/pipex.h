@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:51:30 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/12 02:57:19 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/14 19:46:44 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@
 # include <unistd.h>
 
 int		ft_double_tab_strlen(char **str);
-int		ft_file_to_command_one(char **argv, char **envp, int **fd);
-int		ft_command_one_to_outfile(char **argv, int index, int **pipes);
-int		ft_command_to_command(int index, int **pipes);
+int		ft_file_to_command_one(char **argv, char **envp, int **fd, int p_index);
+int		ft_command_one_to_outfile(char **argv, int index, int **pipes, int p_index);
+int		ft_command_to_command(int **pipes, int index, int p_index);
 int ft_nb_pipes(char **argv);
+int	ft_fork(int argc, char **argv, int **pipes);
+int	ft_first_command(int **pipes, int i, int p_index);
 
 int		**ft_malloc_pipes(char **argv);
 

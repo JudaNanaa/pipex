@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:28:57 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/12 03:01:59 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/14 19:23:45 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,33 +79,6 @@ char	*ft_find_path(char **envp, char *argv)
 	return (free(strcat_all_envp), path);
 }
 
-int	ft_fork(int argc, char **argv, char **envp, int **pipes)
-{
-	int		i;
-	pid_t	pid;
-
-	i = 0;
-	while (i <= argc - 4)
-	{
-		pid = fork();
-		if (pid == -1)
-			return (ft_printf("Error when creating a fork\n"), 1);
-		if (pid == 0)
-		{
-			if (i == 0)
-				return (ft_file_to_command_one(argv, envp, pipes));
-			else if (i == argc - 4)
-				return (ft_command_one_to_outfile(argv, argc, pipes));
-			else
-				return (ft_command_to_command(i, pipes));
-		}
-		i++;
-	}
-	ft_free_pipe(pipes, argv);
-	wait(NULL);
-	return (0);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	int	**pipes;
@@ -117,5 +90,5 @@ int	main(int argc, char **argv, char **envp)
 	pipes = ft_malloc_pipes(argv);
 	if (!pipes)
 		return (ft_printf("Error when malloc pipe\n"), 1);
-	return (ft_fork(argc, argv, envp, pipes));
+	return (ft_fork(argc, argv, pipes));
 }

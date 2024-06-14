@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.c                                           :+:      :+:    :+:   */
+/*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 12:41:06 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/11 21:40:58 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/14 20:02:05 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_free_pipe(int **pipes, char **argv)
 	int size;
 
 	i = 0;
-	size = ft_nb_pipes(argv);
+	size = ft_nb_pipes(argv) + 1;
 	while (i < size)
 	{
 		(close(pipes[i][0]), close(pipes[i][1]));
@@ -35,7 +35,7 @@ int	**ft_malloc_pipes(char **argv)
 	int	**pipes;
 	int size;
 
-	size = ft_nb_pipes(argv);
+	size = ft_nb_pipes(argv) + 1;
 	pipes = malloc(sizeof(int *) * size);
 	if (!pipes)
 		return (NULL);
