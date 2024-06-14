@@ -23,11 +23,12 @@
 # include <unistd.h>
 
 int		ft_double_tab_strlen(char **str);
-int		ft_file_to_command_one(char **argv, char **envp, int **fd, int size);
+int		ft_file_to_command_one(char **argv, char **envp, int **fd);
 int		ft_command_one_to_outfile(char **argv, int index, int **pipes);
 int		ft_command_to_command(int index, int **pipes);
+int ft_nb_pipes(char **argv);
 
-int		**ft_malloc_pipes(int size);
+int		**ft_malloc_pipes(char **argv);
 
 char	**ft_static_argv_or_envp(char *cas, char **envp_or_argv);
 
@@ -36,7 +37,7 @@ char	*ft_strjoin_free_s1(char *s1, char *s2);
 char	*ft_try_to_access_path(char **envp, char *argv);
 char	*ft_find_path(char **envp, char *argv);
 
-void	ft_free_pipe(int **pipes, int size);
+void	ft_free_pipe(int **pipes, char **argv);
 void	ft_free_double_tab(char **tab);
 
 #endif

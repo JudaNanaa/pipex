@@ -13,12 +13,14 @@
 #include "../includes/pipex.h"
 #include <unistd.h>
 
-void	ft_free_pipe(int **pipes, int size)
+void	ft_free_pipe(int **pipes, char **argv)
 {
 	int	i;
+	int size;
 
 	i = 0;
-	while (i < size - 1)
+	size = ft_nb_pipes(argv);
+	while (i < size)
 	{
 		(close(pipes[i][0]), close(pipes[i][1]));
 		free(pipes[i++]);
@@ -27,11 +29,13 @@ void	ft_free_pipe(int **pipes, int size)
 	pipes = NULL;
 }
 
-int	**ft_malloc_pipes(int size)
+int	**ft_malloc_pipes(char **argv)
 {
 	int	i;
 	int	**pipes;
+	int size;
 
+	size = ft_nb_pipes(argv);
 	pipes = malloc(sizeof(int *) * size);
 	if (!pipes)
 		return (NULL);
@@ -40,9 +44,32 @@ int	**ft_malloc_pipes(int size)
 	{
 		pipes[i] = malloc(sizeof(int) * 2);
 		if (!pipes[i])
-			return (ft_free_pipe(pipes, i), NULL);
+			return (ft_free_pipe(pipes, argv), NULL);
 		pipe(pipes[i]);
 		i++;
 	}
 	return (pipes);
+}
+
+int ft_nb_pipes(char **argv)
+{
+	int nb_args;
+	int i;
+
+	i = 0;
+	nb_args = ft_double_tab_strlen(argv);
+	nb_args -= 2;
+	while (argv[i])
+	{
+		if (!ft_strcmp(argv[i], "here_doc"))
+		{
+			nb_args -=2;
+			i++;
+		}
+		i++;
+	}
+	if (ft_strcmp(argv[1], "here_doc") != 0)
+		nb_args--;
+	nb_args--;
+	return (nb_args);
 }

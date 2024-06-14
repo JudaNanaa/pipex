@@ -93,7 +93,7 @@ int	ft_fork(int argc, char **argv, char **envp, int **pipes)
 		if (pid == 0)
 		{
 			if (i == 0)
-				return (ft_file_to_command_one(argv, envp, pipes, argc - 3));
+				return (ft_file_to_command_one(argv, envp, pipes));
 			else if (i == argc - 4)
 				return (ft_command_one_to_outfile(argv, argc, pipes));
 			else
@@ -101,7 +101,8 @@ int	ft_fork(int argc, char **argv, char **envp, int **pipes)
 		}
 		i++;
 	}
-	ft_free_pipe(pipes, argc - 3);
+	ft_free_pipe(pipes, argv);
+	wait(NULL);
 	return (0);
 }
 
@@ -113,7 +114,7 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_printf("Pas assez d'arguments\n"), 1);
 	ft_static_argv_or_envp("argv", argv);
 	ft_static_argv_or_envp("envp", envp);
-	pipes = ft_malloc_pipes(argc - 3 - 1);
+	pipes = ft_malloc_pipes(argv);
 	if (!pipes)
 		return (ft_printf("Error when malloc pipe\n"), 1);
 	return (ft_fork(argc, argv, envp, pipes));
