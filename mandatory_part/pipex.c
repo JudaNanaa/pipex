@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+#include <fcntl.h>
 
 int	ft_file_to_command_one(char **argv, char **envp, int **pipes, int p_index)
 {
@@ -54,7 +55,10 @@ int	ft_command_one_to_outfile(char **argv, int argc, int **pipes, int p_index)
 		(ft_free_double_tab(command2), ft_free_pipe(pipes, argv));
 		return (write(1, "Error when finding the path\n", 28), 1);
 	}
-	outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (!ft_strcmp(argv[argc - 5], "here_doc"))
+		outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (outfile == -1)
 		return (ft_printf("Error when opening the file\n"), 0);
 	(dup2(pipes[p_index - 1][0], STDIN_FILENO), dup2(outfile, STDOUT_FILENO));

@@ -75,18 +75,14 @@ int ft_creating_child(int **pipes, int i, int argc, int p_index)
 		return (ft_printf("Error when creating a fork\n"), 1);
 	if (pid == 0)
 	{
-		if (i == 1)
+		if (i == 2)
 			return (ft_file_to_command_one(argv, envp, pipes, p_index));
 		else if (p_index == 1 && i != 1)
 			return (ft_first_command(pipes, i, p_index));
 		else if (i == argc - 2)
 			return (ft_command_one_to_outfile(argv, argc, pipes, p_index));
 		else
-		{
-			if (ft_strcmp(argv[1], "here_doc") != 0)
-				return (ft_command_to_command(pipes, i + 1, p_index));
 			return (ft_command_to_command(pipes, i, p_index));
-		}
 	}
 	return (0);
 }
@@ -96,7 +92,10 @@ int	ft_fork(int argc, char **argv, int **pipes)
 	int		i;
 	int		p_index;
 
-	i = 1;
+	if (!ft_strcmp(argv[1], "here_doc"))
+		i = 1;
+	else
+		i = 2;
 	p_index = 1;
 	while (i <= argc - 2)
 	{
