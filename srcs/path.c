@@ -101,5 +101,5 @@ char	*ft_try_to_access_path(char **envp, char *argv)
 		}
 		index++;
 	}
-	return (NULL);
+	return (ft_free_double_tab(envp_with_command), NULL);
 }

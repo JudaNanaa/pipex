@@ -65,12 +65,9 @@ char	*ft_find_path(char **envp, char *argv)
 	if (!envp_without_key)
 		return (NULL);
 	strcat_all_envp = ft_strcat_all_envp(envp_without_key);
-	if (!strcat_all_envp)
-	{
-		ft_free_double_tab(envp_without_key);
-		return (NULL);
-	}
 	ft_free_double_tab(envp_without_key);
+	if (!strcat_all_envp)
+		return (NULL);
 	split_all_envp = ft_split(strcat_all_envp, ":\n");
 	if (!split_all_envp)
 		return (free(strcat_all_envp), NULL);

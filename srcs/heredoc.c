@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 17:54:03 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/15 16:38:09 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/15 16:57:35 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,14 @@ char	*ft_normal_format(char *line, char *dest, int *i)
 	int	len;
 
 	len = ft_strlen(dest);
+	dest = ft_realloc(dest, 2);
+	if (!dest)
+		return (NULL);
 	while (line[*i] && line[*i] != '$')
 	{
 		dest = ft_realloc(dest, 2);
 		if (!dest)
-			return (dest);
+			return (NULL);
 		dest[len++] = line[*i];
 		dest[len] = '\0';
 		(*i)++;
@@ -73,7 +76,7 @@ char	*ft_check_if_variable_exist(char **envp, char *var, char *dest, int j)
 		{
 			dest = ft_realloc(dest, ft_strlen(&envp[index][j]));
 			if (!dest)
-				return (NULL);
+				return (free(var), NULL);
 			ft_strcat(dest, &envp[index][j]);
 			break ;
 		}
@@ -81,14 +84,14 @@ char	*ft_check_if_variable_exist(char **envp, char *var, char *dest, int j)
 	}
 	if (!envp[index])
 	{
-		dest = ft_realloc(dest, j);
+		dest = ft_realloc(dest, j + 1);
 		if (!dest)
-			return (NULL);
+			return (free(var), NULL);
 		dest = ft_strcat(dest, "$");
 		ft_strcat(dest, var);
 		dest[ft_strlen(dest) - 1] = '\0';
 	}
-	return (dest);
+	return (free(var), dest);
 }
 
 char	*ft_is_evn_variable(char *line, char **envp)
@@ -110,7 +113,7 @@ char	*ft_is_evn_variable(char *line, char **envp)
 			i++;
 		var = ft_create_variable(line, i);
 		if (!var)
-			return (NULL);
+			return (free(dest), NULL);
 		i = i + ft_strlen(var) - 1;
 		dest = ft_check_if_variable_exist(envp, var, dest, ft_strlen(var));
 		if (!dest)

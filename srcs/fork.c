@@ -52,13 +52,13 @@ int	ft_fork(int argc, char **argv, int **pipes)
 		if (!ft_strcmp(argv[i], "here_doc"))
 		{
 			if (ft_heredoc(argv[i + 1], pipes, p_index) == -1)
-				return (1);
+				return (ft_free_pipe(pipes, argv), 1);
 			i += 2;
 		}
 		else
 		{
 			if (ft_creating_child(pipes, i, argc, p_index) == 1)
-				return (1);
+				return (ft_free_pipe(pipes, argv), 1);
 			i++;
 			p_index++;
 		}

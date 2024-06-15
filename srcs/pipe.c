@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+#include <time.h>
 #include <unistd.h>
 
 void	ft_free_pipe(int **pipes, char **argv)
@@ -23,7 +24,20 @@ void	ft_free_pipe(int **pipes, char **argv)
 	while (i < size)
 	{
 		(close(pipes[i][0]), close(pipes[i][1]));
-		free(pipes[i++]);
+		free(pipes[i]);
+		i++;
+	}
+	free(pipes);
+	pipes = NULL;
+}
+
+void ft_free_pipe_size(int **pipes, int i)
+{
+	while (i > 0)
+	{
+		i--;
+		(close(pipes[i][0]), close(pipes[i][1]));
+		free(pipes[i]);
 	}
 	free(pipes);
 	pipes = NULL;
@@ -44,8 +58,9 @@ int	**ft_malloc_pipes(char **argv)
 	{
 		pipes[i] = malloc(sizeof(int) * 2);
 		if (!pipes[i])
-			return (ft_free_pipe(pipes, argv), NULL);
-		pipe(pipes[i]);
+			return (ft_free_pipe_size(pipes, i), NULL);
+		if (pipe(pipes[i]) == -1)
+			return (ft_free_pipe_size(pipes, i + 1), NULL);
 		i++;
 	}
 	return (pipes);

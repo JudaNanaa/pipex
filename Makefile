@@ -14,7 +14,7 @@ CC = cc
 
 OBJS_DIR = .objets/
 
-SRCS_DIR = mandatory_part/
+SRCS_DIR = srcs/
 
 C_FLAGS = -Wall -Wextra -Werror -g3 
 
