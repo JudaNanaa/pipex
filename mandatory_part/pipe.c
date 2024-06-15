@@ -16,7 +16,7 @@
 void	ft_free_pipe(int **pipes, char **argv)
 {
 	int	i;
-	int size;
+	int	size;
 
 	i = 0;
 	size = ft_nb_pipes(argv) + 1;
@@ -33,7 +33,7 @@ int	**ft_malloc_pipes(char **argv)
 {
 	int	i;
 	int	**pipes;
-	int size;
+	int	size;
 
 	size = ft_nb_pipes(argv) + 1;
 	pipes = malloc(sizeof(int *) * size);
@@ -51,10 +51,10 @@ int	**ft_malloc_pipes(char **argv)
 	return (pipes);
 }
 
-int ft_nb_pipes(char **argv)
+int	ft_nb_pipes(char **argv)
 {
-	int nb_args;
-	int i;
+	int	nb_args;
+	int	i;
 
 	i = 0;
 	nb_args = ft_double_tab_strlen(argv);
@@ -63,7 +63,7 @@ int ft_nb_pipes(char **argv)
 	{
 		if (!ft_strcmp(argv[i], "here_doc"))
 		{
-			nb_args -=2;
+			nb_args -= 2;
 			i++;
 		}
 		i++;

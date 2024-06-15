@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 20:45:28 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/12 02:59:16 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/15 16:37:28 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,8 @@ int	ft_command_one_to_outfile(char **argv, int argc, int **pipes, int p_index)
 		return (ft_printf("Error when opening the file\n"), 0);
 	(dup2(pipes[p_index - 1][0], STDIN_FILENO), dup2(outfile, STDOUT_FILENO));
 	(ft_free_pipe(pipes, argv), close(outfile));
-	if (execve(path, command2, envp) == -1)
-		ft_printf("Error with execve command 2\n");
-	return (1);
+	execve(path, command2, envp);
+	return (ft_printf("Error with execve command 2\n"), 1);
 }
 
 int	ft_command_to_command(int **pipes, int i, int p_index)
@@ -86,9 +85,10 @@ int	ft_command_to_command(int **pipes, int i, int p_index)
 		(ft_free_double_tab(command2), ft_free_pipe(pipes, argv));
 		return (write(1, "Error when finding the path\n", 28), 1);
 	}
-	(dup2(pipes[p_index - 1][0], STDIN_FILENO), dup2(pipes[p_index][1], STDOUT_FILENO));
+	(dup2(pipes[p_index - 1][0], STDIN_FILENO), dup2(pipes[p_index][1],
+				STDOUT_FILENO));
 	ft_free_pipe(pipes, argv);
-		if (execve(path, command2, envp) == -1)
+	if (execve(path, command2, envp) == -1)
 		ft_printf("Error with execve command 2\n");
 	return (1);
 }
@@ -111,9 +111,10 @@ int	ft_first_command(int **pipes, int i, int p_index)
 		(ft_free_double_tab(command2), ft_free_pipe(pipes, argv));
 		return (write(1, "Error when finding the path\n", 28), 1);
 	}
-	(dup2(pipes[p_index - 1][0], STDIN_FILENO), dup2(pipes[p_index][1], STDOUT_FILENO));
+	(dup2(pipes[p_index - 1][0], STDIN_FILENO), dup2(pipes[p_index][1],
+				STDOUT_FILENO));
 	ft_free_pipe(pipes, argv);
-		if (execve(path, command2, envp) == -1)
+	if (execve(path, command2, envp) == -1)
 		ft_printf("Error with execve command 2\n");
 	return (1);
 }

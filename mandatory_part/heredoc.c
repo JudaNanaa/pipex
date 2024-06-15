@@ -3,22 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 17:54:03 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/14 23:46:20 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/15 16:38:09 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/pipex.h"
-#include <strings.h>
-#include <unistd.h>
 
-char *ft_limiter_newline(char *limiter)
+char	*ft_limiter_newline(char *limiter)
 {
-	char *dest;
-	int i;
+	char	*dest;
+	int		i;
 
 	i = ft_strlen(limiter);
 	dest = malloc(sizeof(char) * (i + 2));
@@ -30,90 +27,94 @@ char *ft_limiter_newline(char *limiter)
 	return (dest);
 }
 
-// char **ft_parse_line(char *line)
-// {
-// 	char *dest;
-//
-//
-// 	return (dest);
-// }
-
-int ft_heredoc(char *limiter, int **pipes, int index)
+char	*ft_normal_format(char *line, char *dest, int *i)
 {
-	char *true_limiter;
-	char *line;
+	int	len;
 
-	true_limiter = ft_limiter_newline(limiter);
-	if (!true_limiter)
-		return (-1);
-	write(STDOUT_FILENO, "> ", 2);	
-	line = get_next_line(STDIN_FILENO);
-	if (!line)
-		return (-1);
-	// line = ft_parse_line(line);
-	while (ft_strcmp(line, true_limiter) != 0)
+	len = ft_strlen(dest);
+	while (line[*i] && line[*i] != '$')
 	{
-		write(STDOUT_FILENO, "> ", 2);	
-		write(pipes[index - 1][1], line, ft_strlen(line));
-		line = get_next_line(STDIN_FILENO);
-		if (!line)
-			return (-1);
+		dest = ft_realloc(dest, 2);
+		if (!dest)
+			return (dest);
+		dest[len++] = line[*i];
+		dest[len] = '\0';
+		(*i)++;
 	}
-	return (0);
+	return (dest);
 }
 
-int ft_creating_child(int **pipes, int i, int argc, int p_index)
+char	*ft_create_variable(char *line, int i)
 {
-	pid_t	pid;
-	char **argv;
-	char **envp; 
+	int		j;
+	char	*var;
 
-	envp = ft_static_argv_or_envp("envp", NULL);
-	argv = ft_static_argv_or_envp("argv", NULL);
-	pid = fork();
-	if (pid == -1)
-		return (ft_printf("Error when creating a fork\n"), 1);
-	if (pid == 0)
-	{
-		if (i == 2)
-			return (ft_file_to_command_one(argv, envp, pipes, p_index));
-		else if (p_index == 1 && i != 1)
-			return (ft_first_command(pipes, i, p_index));
-		else if (i == argc - 2)
-			return (ft_command_one_to_outfile(argv, argc, pipes, p_index));
-		else
-			return (ft_command_to_command(pipes, i, p_index));
-	}
-	return (0);
+	j = 0;
+	while (line[i + j] && line[i + j] != ' '
+		&& (line[i + j] < 9 || line[i + j] > 13))
+		j++;
+	var = malloc(sizeof(char) * (j + 2));
+	if (!var)
+		return (NULL);
+	var = ft_strncpy(var, &line[i], j);
+	var[j++] = '=';
+	var[j] = '\0';
+	return (var);
 }
 
-int	ft_fork(int argc, char **argv, int **pipes)
+char	*ft_check_if_variable_exist(char **envp, char *var, char *dest, int j)
 {
+	int	index;
+
+	index = 0;
+	while (envp[index])
+	{
+		if (ft_strncmp(var, envp[index], j) == 0)
+		{
+			dest = ft_realloc(dest, ft_strlen(&envp[index][j]));
+			if (!dest)
+				return (NULL);
+			ft_strcat(dest, &envp[index][j]);
+			break ;
+		}
+		index++;
+	}
+	if (!envp[index])
+	{
+		dest = ft_realloc(dest, j);
+		if (!dest)
+			return (NULL);
+		dest = ft_strcat(dest, "$");
+		ft_strcat(dest, var);
+		dest[ft_strlen(dest) - 1] = '\0';
+	}
+	return (dest);
+}
+
+char	*ft_is_evn_variable(char *line, char **envp)
+{
+	char	*dest;
+	char	*var;
 	int		i;
-	int		p_index;
 
-	if (!ft_strcmp(argv[1], "here_doc"))
-		i = 1;
-	else
-		i = 2;
-	p_index = 1;
-	while (i <= argc - 2)
+	i = 0;
+	dest = NULL;
+	while (line[i])
 	{
-		if (!ft_strcmp(argv[i], "here_doc"))
-		{
-			if (ft_heredoc(argv[i + 1], pipes, p_index) == -1)
-				return (1);
-			i += 2;
-		}
-		else
-		{
-			if (ft_creating_child(pipes, i, argc, p_index) == 1)
-				return (1);
+		dest = ft_normal_format(line, dest, &i);
+		if (dest == NULL)
+			return (NULL);
+		if (!line[i])
+			return (dest);
+		if (line[i] == '$')
 			i++;
-			p_index++;
-		}
+		var = ft_create_variable(line, i);
+		if (!var)
+			return (NULL);
+		i = i + ft_strlen(var) - 1;
+		dest = ft_check_if_variable_exist(envp, var, dest, ft_strlen(var));
+		if (!dest)
+			return (NULL);
 	}
-	ft_free_pipe(pipes, argv);
-	wait(NULL);
-	return (0);
+	return (dest);
 }
