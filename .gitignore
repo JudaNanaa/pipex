@@ -1,4 +1,6 @@
 ./pipex
 .gitignore
-.vscode
-*/*.o
+.vscode/
+.objets/
+*.o
+.gitignore

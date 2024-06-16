@@ -31,7 +31,7 @@ void	ft_free_pipe(int **pipes, char **argv)
 	pipes = NULL;
 }
 
-void ft_free_pipe_size(int **pipes, int i)
+void	ft_free_pipe_size(int **pipes, int i)
 {
 	while (i > 0)
 	{

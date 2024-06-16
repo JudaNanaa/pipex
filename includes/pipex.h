@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:51:30 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/15 16:36:07 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/16 14:33:28 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int		ft_heredoc(char *limiter, int **pipes, int index);
 int		**ft_malloc_pipes(char **argv);
 
 char	**ft_static_argv_or_envp(char *cas, char **envp_or_argv);
+char	**ft_split_no_malloc(char *s, char *c, char **split);
 
 char	*ft_strjoin_with_slash(char const *s1, char const *s2);
 char	*ft_strjoin_free_s1(char *s1, char *s2);

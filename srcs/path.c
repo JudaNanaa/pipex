@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:37:10 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/12 03:01:11 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/16 17:35:02 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,6 @@ char	*ft_try_to_access_path(char **envp, char *argv)
 		}
 		index++;
 	}
+	perror(strerror(errno));
 	return (ft_free_double_tab(envp_with_command), NULL);
 }
