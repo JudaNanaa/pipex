@@ -27,10 +27,10 @@ int	ft_creating_child(int **pipes, int i, int argc, int p_index)
 	{
 		if (i == 2)
 			return (ft_file_to_command_one(argv, envp, pipes, p_index));
-		else if (p_index == 1 && i != 1)
-			return (ft_first_command(pipes, i, p_index));
 		else if (i == argc - 2)
 			return (ft_command_one_to_outfile(argv, argc, pipes, p_index));
+		else if (p_index == 1 && i != 1)
+			return (ft_first_command(pipes, i, p_index));
 		else
 			return (ft_command_to_command(pipes, i, p_index));
 	}
